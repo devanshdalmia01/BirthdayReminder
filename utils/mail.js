@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import cron from "node-cron";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -12,27 +11,17 @@ const transport = nodemailer.createTransport({
 	},
 });
 
-const sendEmail = (name, email, date) => {
-	let day = date.slice(3, 5);
-	let month = date.slice(0, 2);
-	cron.schedule(
-		`0 0 ${day} ${month} *`,
-		() => {
-			transport
-				.sendMail({
-					from: process.env.EMAIL,
-					to: email,
-					subject: `aaj hbd hai ${name}`,
-					html: `<h1>HBD hai</h1>
-		  <h2>Hello ${name}</h2>`,
-				})
-				.catch((err) => console.log(err));
-		},
-		{
-			scheduled: true,
-			timezone: "Asia/Kolkata",
-		}
-	);
+const sendEmail = (recieverName, recieverEmail, birthdayPersonName) => {
+	console.log(2, recieverName, recieverEmail, birthdayPersonName);
+	transport
+		.sendMail({
+			from: process.env.EMAIL,
+			to: recieverEmail,
+			subject: `aaj hbd hai ${birthdayPersonName} ka`,
+			html: `<h1>HBD hai ${birthdayPersonName} ka</h1>
+		  <h2>Hello ${recieverName}</h2>`,
+		})
+		.catch((err) => console.log(err));
 };
 
 export { sendEmail };
